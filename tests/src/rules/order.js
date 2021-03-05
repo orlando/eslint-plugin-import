@@ -2139,6 +2139,34 @@ ruleTester.run('order', rule, {
         message: '`..` import should occur before import of `../a`',
       }],
     }),
+    // Aesthetically
+    test({
+      code: `
+        import { Table } from '@/components/table';
+        import { Box } from '@/components/box';
+        import { Link } from '@/components/link';
+        import { Button } from '@/components/button';
+        import { Hr } from '@/components/hr';
+      `,
+      output: `
+        import { Button } from '@/components/button';
+        import { Table } from '@/components/table';
+        import { Link } from '@/components/link';
+        import { Box } from '@/components/box';
+        import { Hr } from '@/components/hr';
+      `,
+      options: [
+        {
+          aesthetically: true,
+        },
+      ],
+      errors: [{
+        message: '`@/components/link` import should occur before import of `@/components/box`',
+      },
+      {
+        message: '`@/components/button` import should occur before import of `@/components/table`',
+      }],
+    }),
     // Alphabetize with require
     ...semver.satisfies(eslintPkg.version, '< 3.0.0') ? [] : [
       test({
